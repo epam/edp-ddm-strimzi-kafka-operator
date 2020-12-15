@@ -1,0 +1,102 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: {{ .Values.cluster.name }}
+spec:
+  kafka:
+    template:
+      pod:
+        metadata:
+          annotations:
+            backup.velero.io/backup-volumes: data-0
+            sidecar.istio.io/inject: "false"
+        securityContext: {}
+      podDisruptionBudget:
+        maxUnavailable: 0
+    version: 3.0.0
+    replicas: {{ .Values.global.kafkaOperator.kafkaBrokers }}
+    {{- if not .Values.global.disableRequestsLimits }}
+    resources:
+      limits:
+        cpu: '2'
+        memory: 4Gi
+      requests:
+        cpu: '1'
+        memory: 2Gi
+    {{- end }}
+    listeners:
+      - name: plain
+        port: 9092
+        type: internal
+        tls: false
+      - name: tls
+        port: 9093
+        type: internal
+        tls: true
+        authentication:
+          type: tls
+    config:
+      transaction.state.log.replication.factor: {{ .Values.global.kafkaOperator.kafkaBrokers }}
+      log.message.format.version: '3.0'
+    {{- $logminisr := .Values.global.kafkaOperator.kafkaBrokers | int -}}
+    {{- if lt $logminisr 2 }}
+      transaction.state.log.min.isr: {{ .Values.global.kafkaOperator.kafkaBrokers }}
+    {{ else }}
+      transaction.state.log.min.isr: {{ sub .Values.global.kafkaOperator.kafkaBrokers 1 }}
+    {{- end }}
+      offsets.topic.replication.factor: {{ .Values.global.kafkaOperator.replicationFactor }}
+    jvmOptions:
+      "-XX":
+        "UseG1GC": true
+        "MaxGCPauseMillis": 20
+        "InitiatingHeapOccupancyPercent": 35
+        "ExplicitGCInvokesConcurrent": true
+        "MetaspaceSize": "96m"
+        "MinMetaspaceFreeRatio": 50
+        "MaxMetaspaceFreeRatio": 80
+        "G1HeapRegionSize": "16M"
+    storage:
+      type: jbod
+      volumes:
+        - id: 0
+          type: persistent-claim
+          size: 20Gi
+          deleteClaim: false
+          class: {{ .Values.storageClass }}
+    metricsConfig:
+      type: jmxPrometheusExporter
+      valueFrom:
+        configMapKeyRef:
+          name: kafka-metrics
+          key: kafka-metrics-config.yml
+  kafkaExporter:
+    groupRegex: ".*"
+    topicRegex: ".*"
+  zookeeper:
+    template:
+      pod:
+        metadata:
+          annotations:
+            backup.velero.io/backup-volumes: data
+            sidecar.istio.io/inject: "false"
+        securityContext: {}
+      podDisruptionBudget:
+        maxUnavailable: 0
+    replicas: {{ .Values.global.kafkaOperator.zookeepers }}
+    {{- if not .Values.global.disableRequestsLimits }}
+    resources:
+      limits:
+        cpu: '1'
+        memory: "1Gi"
+      requests:
+        cpu: '0.5'
+        memory: "0.5Gi"
+    {{- end }}
+    storage:
+      class: {{ .Values.storageClass }}
+      type: persistent-claim
+      size: 5Gi
+      deleteClaim: false
+  entityOperator:
+    topicOperator: {}
+    userOperator: {}

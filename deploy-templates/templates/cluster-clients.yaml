@@ -1,0 +1,12 @@
+{{- range $client := .Values.cluster.clients }}
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaUser
+metadata:
+  name: {{ $client }}
+  labels:
+    strimzi.io/cluster: {{ $.Values.cluster.name }}
+spec:
+  authentication:
+    type: tls
+---
+{{- end }}

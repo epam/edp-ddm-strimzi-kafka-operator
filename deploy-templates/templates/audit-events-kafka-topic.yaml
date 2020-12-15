@@ -1,0 +1,11 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: KafkaTopic
+metadata:
+  name: audit-events
+  labels:
+    strimzi.io/cluster: {{ .Values.cluster.name }}
+spec:
+  config: {}
+  partitions: 15
+  replicas: {{ .Values.global.kafkaOperator.replicationFactor }}
+  topicName: audit-events

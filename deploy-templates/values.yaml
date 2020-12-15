@@ -1,0 +1,90 @@
+global:
+  kafkaOperator:
+    kafkaBrokers: 3
+    zookeepers: 3
+    replicationFactor: 3
+  disableRequestsLimits: false
+
+replicaCount: 1
+
+serviceAccountName: kafka-registration
+
+kafkadrop:
+  brokerConnect: kafka-cluster-kafka-bootstrap
+  port: 9092
+  properties: ""
+  truststore: ""
+  keystore: ""
+  propertiesFile: "kafka.properties"
+  truststoreFile: "kafka.truststore.jks"
+  keystoreFile: "kafka.keystore.jks"
+
+jvm:
+  opts: ""
+jmx:
+  port: 8686
+host:
+
+server:
+  port: 9000
+  servlet:
+    contextPath: /
+cmdArgs: ""
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+podAnnotations:
+  sidecar.istio.io/inject: "false"
+
+mountProtoDesc:
+  enabled: false
+  hostPath:
+
+service:
+  annotations: {}
+  type: NodePort
+  port: 9000
+# Default values for strimzi-kafka-operator.
+
+cluster:
+  name: kafka-cluster
+  clients: [ 'rest-api-user', 'kafka-api-user', 'soap-api-user', 'settings-api-user', 'settings-persistence-user',
+             'excerpt-api-user', 'excerpt-worker-user', 'excerpt-worker-docx-user', 'excerpt-worker-csv-user', 'user-publisher-user',
+             'process-history-api-user', 'process-history-persistence-user', 'bpms-user', 'notification-service-user']
+
+defaultImageTag: 0.28.0
+image:
+  kafkadrop:
+    name: kafka-ui
+    repository: obsidiandynamics/kafdrop
+    tag: latest
+logVolume: co-config-volume
+logConfigMap: strimzi-cluster-operator
+logLevel: ${env:STRIMZI_LOG_LEVEL:-INFO}
+fullReconciliationIntervalMs: 120000
+operationTimeoutMs: 300000
+kubernetesServiceDnsDomain: cluster.local
+
+name: kafka-ui
+port: 9404
+
+monitoring:
+  namespace: openshift-monitoring
+  prometheusScrapePath: /metrics
+  jobLabel: app
+
+storageClass: gp2
+
+kafkaConnectConf:
+  clusterName: 'kafka-connect-cluster'
+  image: 'kafka-connect-image-master:1.4.0-SNAPSHOT.26'
+  auditDbName: 'audit'
+  auditSecretName: citus-roles-secrets
+  auditUserKey: anSvcName
+  auditPasswordKey: anSvcPass
+  dbConnectionUrl: 'jdbc:postgresql://citus-master:5432/audit'
+  auditConnectorName: 'audit'
+  schemaRegistryUrl: 'http://kafka-schema-registry:8081'

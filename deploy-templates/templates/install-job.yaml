@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kafka-registration-{{ uuidv4 }}
+  labels:
+    strimzi.io/cluster: {{ .Values.cluster.name }}
+spec:
+  template:
+    metadata:
+      name: register-kafka-on-central-kafka-operator
+    spec:
+      restartPolicy: Never
+      serviceAccountName: {{ .Values.serviceAccountName }}
+      containers:
+        - name: register-kafka-on-central-kafka-operator
+          image: quay.io/openshift/origin-cli:latest
+          command: ["/bin/sh"]
+          args: ["-c","bash kafka-register.sh"]
+          env:
+            - name: KAFKA_CENTRAL_NAMESPACE
+              value: {{ .Values.global.kafkaOperator.kafkaCentralNamespace }}
+            - name: NAMESPACE
+              value: {{ .Release.Namespace }}
+          volumeMounts:
+            - name: kafka-register
+              mountPath: kafka-register.sh
+              subPath: kafka-register.sh
+      volumes:
+        - name: kafka-register
+          configMap:
+            name: kafka-register

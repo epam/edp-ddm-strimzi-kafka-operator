@@ -1,0 +1,22 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ .Values.name }}-{{ .Values.namespace }}
+  namespace: {{ .Values.monitoring.namespace }}
+  labels:
+    app.kubernetes.io/name: kafka-exporter
+    relatedNamespace: {{ .Release.Namespace }}
+spec:
+  endpoints:
+  - bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token
+    interval: 30s
+    path: {{ .Values.monitoring.prometheusScrapePath }}
+    scheme: http
+    targetPort: {{ .Values.port }}
+  jobLabel: {{ .Values.monitoring.jobLabel }}
+  namespaceSelector:
+    matchNames:
+      - {{ .Values.namespace }}
+  selector:
+    matchLabels:
+      strimzi.io/kind: Kafka
