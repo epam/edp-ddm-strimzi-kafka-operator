@@ -175,3 +175,11 @@ imageRepositoryOverride: ""
 # Override the docker image tag used by all Strimzi images
 imageTagOverride: ""
 createGlobalResources: true
+
+name: kafka-ui
+port: 9404
+
+monitoring:
+  namespace: openshift-monitoring
+  prometheusScrapePath: /metrics
+  jobLabel: app

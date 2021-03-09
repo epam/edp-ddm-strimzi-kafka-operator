@@ -27,6 +27,10 @@ spec:
         type: persistent-claim
         size: 1Gi
         deleteClaim: false
+    metrics: {}
+  kafkaExporter:
+    groupRegex: ".*"
+    topicRegex: ".*"
   zookeeper:
     replicas: 3
     storage:
