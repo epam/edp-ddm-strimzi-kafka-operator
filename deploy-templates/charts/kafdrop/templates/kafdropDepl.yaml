@@ -16,7 +16,7 @@ spec:
     spec:
       initContainers:
         - name: init
-          image: "image-registry.openshift-image-registry.svc:5000/mdtu-ddm-edp-cicd/busybox"
+          image: {{ template "dockerProxyRegistry" . -}} busybox
           command: [ "sh", "-c" ]
           args: [ "while ! nc -w 1 {{ .Values.kafkadrop.brokerConnect }} {{ .Values.kafkadrop.port }} </dev/null; do sleep 10; done;" ]
       containers:
