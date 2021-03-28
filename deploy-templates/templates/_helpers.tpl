@@ -32,5 +32,9 @@ Create chart name and version as used by the chart label.
 {{- end -}}
 
 {{- define "imageRepositoryOverride" -}}
-{{- .Values.imageRepositoryOverride -}}
+{{- if .Values.global -}}
+  {{- if .Values.global.imageRegistry -}}
+    {{- .Values.global.imageRegistry -}}
+  {{- end -}}
+{{- end -}}
 {{- end -}}
