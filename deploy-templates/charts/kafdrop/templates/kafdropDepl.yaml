@@ -21,7 +21,7 @@ spec:
           args: [ "while ! nc -w 1 {{ .Values.kafkadrop.brokerConnect }} {{ .Values.kafkadrop.port }} </dev/null; do sleep 10; done;" ]
       containers:
         - name: {{ .Values.image.kafkadrop.name }}
-          image: "{{ .Values.image.kafkadrop.repository }}:{{ .Values.image.kafkadrop.tag }}"
+          image: "{{ template "dockerProxyRegistry" . -}} {{ .Values.image.kafkadrop.repository }}:{{ .Values.image.kafkadrop.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
           - name: KAFKA_BROKERCONNECT
