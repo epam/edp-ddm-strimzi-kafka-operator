@@ -15,7 +15,7 @@ rules:
   resources:
     # The cluster operator needs to create and manage cluster role bindings in the case of an install where a user
     # has specified they want their cluster role bindings generated
-  - clusterrolebindings
+  - rolebindings
   verbs:
   - get
   - list
