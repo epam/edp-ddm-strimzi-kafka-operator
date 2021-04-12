@@ -45,6 +45,9 @@ service:
 watchNamespaces: []
 watchAnyNamespace: false
 
+cluster:
+  name: kafka-cluster
+
 image:
   registry: quay.io
   repository: strimzi
@@ -52,7 +55,7 @@ image:
   tag: 0.21.1
   kafkadrop:
     name: kafka-ui
-    repository: obsidiandynamics/kafdrop
+    repository: nexus-docker-registry.apps.cicd2.mdtu-ddm.projects.epam.com/obsidiandynamics/kafdrop
     tag: latest
 logVolume: co-config-volume
 logConfigMap: strimzi-cluster-operator
