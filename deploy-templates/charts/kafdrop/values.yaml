@@ -44,5 +44,5 @@ watchAnyNamespace: false
 image:
   kafkadrop:
     name: kafka-ui
-    repository: obsidiandynamics/kafdrop
+    repository: nexus-docker-registry.apps.cicd2.mdtu-ddm.projects.epam.com/obsidiandynamics/kafdrop
     tag: latest

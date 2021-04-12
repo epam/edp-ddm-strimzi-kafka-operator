@@ -1,0 +1,20 @@
+apiVersion: kafka.strimzi.io/v1beta1
+kind: KafkaConnect
+metadata:
+  annotations:
+    strimzi.io/use-connector-resources: 'true'
+    "helm.sh/hook": "post-install"
+  name: kafka-connect-cluster
+spec:
+  bootstrapServers: '{{ .Values.cluster.name }}-kafka-bootstrap:9093'
+  config:
+    config.storage.topic: connect-cluster-configs
+    group.id: connect-cluster
+    offset.storage.topic: connect-cluster-offsets
+    status.storage.topic: connect-cluster-status
+  replicas: 1
+  tls:
+    trustedCertificates:
+      - certificate: ca.crt
+        secretName: kafka-cluster-cluster-ca-cert
+  version: 2.7.0
