@@ -2,6 +2,8 @@ apiVersion: kafka.strimzi.io/v1alpha1
 kind: KafkaConnector
 metadata:
   name: kafka-source-connector
+  labels:
+    strimzi.io/cluster: kafka-connect-cluster
 spec:
   class: io.confluent.connect.jdbc.JdbcSinkConnector
   config:
