@@ -1,0 +1,15 @@
+apiVersion: kafka.strimzi.io/v1alpha1
+kind: KafkaConnector
+metadata:
+  name: kafka-source-connector
+spec:
+  class: io.confluent.connect.jdbc.JdbcSinkConnector
+  config:
+    connection.password: Xj7xXXpYMWtd
+    connection.url: 'jdbc:postgresql://citus-master:5432/registry_audit'
+    connection.user: postgres
+    connector.class: io.confluent.connect.jdbc.JdbcSinkConnector
+    table.name.format: audit_event
+    topics: audit-events
+    value.converter.schema.registry.url: 'http://kafka-schema-registry:8081'
+  tasksMax: 2

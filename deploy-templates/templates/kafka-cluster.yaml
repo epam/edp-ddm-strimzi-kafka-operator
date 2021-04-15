@@ -23,20 +23,9 @@ spec:
         type: internal
         tls: true
     config:
-      offsets.topic.compression.codec: 1
-      offsets.topic.retention.minutes: 1
-      offsets.topic.segment.bytes: 5000
-      log.cleaner.enable: 'true'
-      log.retention.minutes: 1
-      log.segment.bytes: 5000
-      log.cleaner.threads: 2
       transaction.state.log.replication.factor: 3
-      log.retention.check.interval.ms: 60000
-      log.retention.bytes: 5000
       log.message.format.version: '2.6'
       transaction.state.log.min.isr: 2
-      log.cleaner.delete.retention.ms: 60000
-      log.roll.minutes: 2
       offsets.topic.replication.factor: 3
     storage:
       type: jbod
