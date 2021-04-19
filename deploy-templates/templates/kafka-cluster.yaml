@@ -28,13 +28,13 @@ spec:
       transaction.state.log.min.isr: 2
       offsets.topic.replication.factor: 3
     storage:
-      class: {{ .Values.storageClass }}
       type: jbod
       volumes:
       - id: 0
         type: persistent-claim
         size: 5Gi
         deleteClaim: false
+        class: {{ .Values.storageClass }}
     metrics: {}
   kafkaExporter:
     groupRegex: ".*"
