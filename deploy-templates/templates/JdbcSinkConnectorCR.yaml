@@ -1,8 +1,6 @@
 apiVersion: kafka.strimzi.io/v1alpha1
 kind: KafkaConnector
 metadata:
-  creationTimestamp: '2021-04-16T18:12:13Z'
-  generation: 4
   labels:
     strimzi.io/cluster: kafka-connect-cluster
   name: audits

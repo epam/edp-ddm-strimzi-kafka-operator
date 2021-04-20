@@ -186,3 +186,5 @@ monitoring:
   namespace: openshift-monitoring
   prometheusScrapePath: /metrics
   jobLabel: app
+
+storageClass: gp2
