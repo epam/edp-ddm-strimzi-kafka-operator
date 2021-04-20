@@ -4,6 +4,11 @@ metadata:
   name: {{ .Values.cluster.name }}
 spec:
   kafka:
+    template:
+      pod:
+        metadata:
+          annotations:
+            backup.velero.io/backup-volumes: data
     version: 2.6.0
     replicas: 3
     resources:
@@ -40,6 +45,11 @@ spec:
     groupRegex: ".*"
     topicRegex: ".*"
   zookeeper:
+    template:
+      pod:
+        metadata:
+          annotations:
+            backup.velero.io/backup-volumes: data
     replicas: 3
     storage:
       class: {{ .Values.storageClass }}
