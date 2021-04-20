@@ -8,7 +8,7 @@ spec:
       pod:
         metadata:
           annotations:
-            backup.velero.io/backup-volumes: data
+            backup.velero.io/backup-volumes: data-0
     version: 2.6.0
     replicas: 3
     resources:
