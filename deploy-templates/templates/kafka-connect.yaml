@@ -3,18 +3,25 @@ kind: KafkaConnect
 metadata:
   annotations:
     strimzi.io/use-connector-resources: 'true'
-    "helm.sh/hook": "post-install"
-  name: kafka-connect-cluster
+  name: 'kafka-connect-cluster'
 spec:
-  bootstrapServers: '{{ .Values.cluster.name }}-kafka-bootstrap:9093'
+  bootstrapServers: 'kafka-cluster-kafka-bootstrap:9093'
   config:
-    config.storage.topic: connect-cluster-configs
-    group.id: connect-cluster
-    offset.storage.topic: connect-cluster-offsets
-    status.storage.topic: connect-cluster-status
+    config.providers: 'file'
+    config.providers.file.class: 'org.apache.kafka.common.config.provider.FileConfigProvider'
+    config.storage.topic: 'connect-cluster-configs'
+    group.id: 'connect-cluster'
+    offset.storage.topic: 'connect-cluster-offsets'
+    status.storage.topic: 'connect-cluster-status'
+  externalConfiguration:
+    volumes:
+      - name: 'connector-config'
+        secret:
+          secretName: 'citus-connector-properties'
+  image: 'nexus-docker-hosted.apps.cicd2.mdtu-ddm.projects.epam.com/mdtu-ddm-edp-cicd/kafka-connect-image-master:1.1.1-SNAPSHOT.14'
   replicas: 1
   tls:
     trustedCertificates:
-      - certificate: ca.crt
-        secretName: kafka-cluster-cluster-ca-cert
+      - certificate: 'ca.crt'
+        secretName: 'kafka-cluster-cluster-ca-cert'
   version: 2.7.0
