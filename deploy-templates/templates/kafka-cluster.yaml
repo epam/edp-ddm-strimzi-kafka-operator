@@ -54,7 +54,7 @@ spec:
     storage:
       class: {{ .Values.storageClass }}
       type: persistent-claim
-      size: 1Gi
+      size: 5Gi
       deleteClaim: false
   entityOperator:
     topicOperator: {}
