@@ -18,7 +18,7 @@ spec:
       - name: 'connector-config'
         secret:
           secretName: 'kafka-db-connector'
-  image: 'nexus-docker-hosted.apps.cicd2.mdtu-ddm.projects.epam.com/mdtu-ddm-edp-cicd/kafka-connect-image-master:1.1.1-SNAPSHOT.14'
+  image: {{ .Values.dockerRegistry }}/{{ .Values.edpProject }}/kafka-connect-image-master:1.1.1-SNAPSHOT.14
   replicas: 1
   tls:
     trustedCertificates:
