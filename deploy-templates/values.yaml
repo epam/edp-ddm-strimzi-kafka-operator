@@ -188,3 +188,5 @@ monitoring:
   jobLabel: app
 
 storageClass: gp2
+
+dockerProxyRegistry: nexus-docker-registry.apps.cicd2.mdtu-ddm.projects.epam.com
