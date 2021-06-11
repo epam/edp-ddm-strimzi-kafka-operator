@@ -5,6 +5,11 @@ metadata:
     strimzi.io/use-connector-resources: 'true'
   name: 'kafka-connect-cluster'
 spec:
+  template:
+    pod:
+      metadata:
+        annotations:
+          sidecar.istio.io/inject: "false"
   bootstrapServers: 'kafka-cluster-kafka-bootstrap:9093'
   config:
     config.providers: 'file'

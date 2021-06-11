@@ -28,7 +28,8 @@ tolerations: []
 
 affinity: {}
 
-podAnnotations: {}
+podAnnotations:
+  sidecar.istio.io/inject: "false"
 
 mountProtoDesc:
   enabled: false

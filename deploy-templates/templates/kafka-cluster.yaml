@@ -9,6 +9,7 @@ spec:
         metadata:
           annotations:
             backup.velero.io/backup-volumes: data-0
+            sidecar.istio.io/inject: "false"
     version: 2.6.0
     replicas: 3
     resources:
@@ -50,6 +51,7 @@ spec:
         metadata:
           annotations:
             backup.velero.io/backup-volumes: data
+            sidecar.istio.io/inject: "false"
     replicas: 3
     storage:
       class: {{ .Values.storageClass }}
