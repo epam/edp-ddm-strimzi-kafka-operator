@@ -10,6 +10,7 @@ spec:
           annotations:
             backup.velero.io/backup-volumes: data-0
             sidecar.istio.io/inject: "false"
+        securityContext: {}
     version: 2.6.0
     replicas: 3
     resources:
