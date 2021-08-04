@@ -53,6 +53,7 @@ spec:
           annotations:
             backup.velero.io/backup-volumes: data
             sidecar.istio.io/inject: "false"
+        securityContext: {}
     replicas: 3
     storage:
       class: {{ .Values.storageClass }}
