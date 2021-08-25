@@ -48,6 +48,7 @@ watchAnyNamespace: false
 
 cluster:
   name: kafka-cluster
+  clients: [ 'rest-api', 'kafka-api', 'settings-api', 'settings-persistence']
 
 image:
   registry: quay.io
