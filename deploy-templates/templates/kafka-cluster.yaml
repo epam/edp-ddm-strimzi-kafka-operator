@@ -29,6 +29,8 @@ spec:
         port: 9093
         type: internal
         tls: true
+        authentication:
+          type: tls
     config:
       transaction.state.log.replication.factor: 3
       log.message.format.version: '2.6'
