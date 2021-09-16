@@ -57,7 +57,7 @@ spec:
             sidecar.istio.io/inject: "false"
         securityContext: {}
     replicas: 3
-      resources:
+    resources:
       limits:
         cpu: '1'
         memory: "1Gi"
