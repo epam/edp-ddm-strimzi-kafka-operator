@@ -6,6 +6,6 @@ metadata:
     strimzi.io/cluster: {{ .Values.cluster.name }}
 spec:
   config: {}
-  partitions: 1
-  replicas: 1
+  partitions: 15
+  replicas: 3
   topicName: audit-events
