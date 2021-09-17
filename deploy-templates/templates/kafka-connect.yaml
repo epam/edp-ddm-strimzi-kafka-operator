@@ -3,7 +3,8 @@ kind: KafkaConnect
 metadata:
   annotations:
     strimzi.io/use-connector-resources: 'true'
-  name: 'kafka-connect-cluster'
+    "helm.sh/hook": post-install,post-upgrade
+  name: {{ .Values.kafkaConnectConf.clusterName }}
 spec:
   template:
     pod:
@@ -12,17 +13,24 @@ spec:
           sidecar.istio.io/inject: "false"
   bootstrapServers: 'kafka-cluster-kafka-bootstrap:9092'
   config:
-    config.providers: 'file'
-    config.providers.file.class: 'org.apache.kafka.common.config.provider.FileConfigProvider'
+    config.providers: 'env'
+    config.providers.env.class: 'io.strimzi.kafka.EnvVarConfigProvider'
     config.storage.topic: 'connect-cluster-configs'
     group.id: 'connect-cluster'
     offset.storage.topic: 'connect-cluster-offsets'
     status.storage.topic: 'connect-cluster-status'
   externalConfiguration:
-    volumes:
-      - name: 'connector-config'
-        secret:
-          secretName: 'kafka-db-connector'
-  image: {{ .Values.dockerProxyRegistry }}/{{ .Values.edpProject }}/kafka-connect-image-release-1-2:1.2.0-RC.1
+    env:
+      - name: DB_USER
+        valueFrom:
+          secretKeyRef:
+            key: {{ .Values.kafkaConnectConf.auditUserKey }}
+            name: {{ .Values.kafkaConnectConf.auditSecretName }}
+      - name: DB_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            key: {{ .Values.kafkaConnectConf.auditPasswordKey }}
+            name: {{ .Values.kafkaConnectConf.auditSecretName }}
+  image: {{ .Values.dockerProxyRegistry }}/{{ .Values.edpProject }}/{{ .Values.kafkaConnectConf.image }}
   replicas: 1
-  version: 2.7.0
+  version: 2.6.0

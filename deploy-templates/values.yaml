@@ -192,3 +192,14 @@ monitoring:
 storageClass: gp2
 
 dockerProxyRegistry: nexus-docker-registry.apps.cicd2.mdtu-ddm.projects.epam.com
+
+kafkaConnectConf:
+  clusterName: 'kafka-connect-cluster'
+  image: 'kafka-connect-image-master:1.3.0-SNAPSHOT.5'
+  auditDbName: 'audit'
+  auditSecretName: citus-roles-secrets
+  auditUserKey: anSvcUser
+  auditPasswordKey: anSvcPass
+  dbConnectionUrl: 'jdbc:postgresql://citus-master:5432/audit'
+  auditConnectorName: 'audit'
+  schemaRegistryUrl: 'http://kafka-schema-registry:8081'

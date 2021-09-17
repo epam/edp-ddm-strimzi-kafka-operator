@@ -2,24 +2,23 @@ apiVersion: kafka.strimzi.io/v1alpha1
 kind: KafkaConnector
 metadata:
   labels:
-    strimzi.io/cluster: 'kafka-connect-cluster'
-  name: 'audit'
+    strimzi.io/cluster: {{ .Values.kafkaConnectConf.clusterName }}
+  name: {{ .Values.kafkaConnectConf.auditConnectorName }}
 spec:
   class: 'io.confluent.connect.jdbc.JdbcSinkConnector'
   tasksMax: 1
   config:
-    value.converter.schema.registry.url: 'http://kafka-schema-registry:8081'
+    value.converter.schema.registry.url: {{ .Values.kafkaConnectConf.schemaRegistryUrl }}
     value.converter: 'io.confluent.connect.avro.AvroConverter'
     topics: 'audit-events'
-    name: 'audit'
-    connection.password: '${file:/opt/kafka/external-configuration/connector-config/connector.properties:dbPassword}'
+    name: {{ .Values.kafkaConnectConf.auditConnectorName }}
+    connection.password: '${env:DB_PASSWORD}'
     connector.class: 'io.confluent.connect.jdbc.JdbcSinkConnector'
     table.name.format: 'audit_event'
-    connection.user: '${file:/opt/kafka/external-configuration/connector-config/connector.properties:dbUsername}'
+    connection.user: '${env:DB_USER}'
     auto.evolve: 'true'
-    connection.url: 'jdbc:postgresql://citus-master:5432/${file:/opt/kafka/external-configuration/connector-config/connector.properties:dbName}'
+    connection.url: {{ .Values.kafkaConnectConf.dbConnectionUrl }}
     transforms: 'TimestampConverter'
     transforms.TimestampConverter.field: 'timestamp'
     transforms.TimestampConverter.type: 'org.apache.kafka.connect.transforms.TimestampConverter$Value'
     transforms.TimestampConverter.target.type: 'Timestamp'
-
