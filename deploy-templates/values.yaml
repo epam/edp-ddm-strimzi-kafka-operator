@@ -198,7 +198,7 @@ kafkaConnectConf:
   image: 'kafka-connect-image-master:1.3.0-SNAPSHOT.5'
   auditDbName: 'audit'
   auditSecretName: citus-roles-secrets
-  auditUserKey: anSvcUser
+  auditUserKey: anSvcName
   auditPasswordKey: anSvcPass
   dbConnectionUrl: 'jdbc:postgresql://citus-master:5432/audit'
   auditConnectorName: 'audit'
