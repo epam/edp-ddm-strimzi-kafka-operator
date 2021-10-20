@@ -1,5 +1,7 @@
-replicaCount: 1
+global:
+  disableRequestsLimits: false
 
+replicaCount: 1
 
 kafkadrop:
   brokerConnect: kafka-cluster-kafka-bootstrap

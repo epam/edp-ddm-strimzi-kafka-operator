@@ -13,6 +13,7 @@ spec:
         securityContext: {}
     version: 2.6.0
     replicas: 3
+    {{- if not .Values.global.disableRequestsLimits }}
     resources:
       limits:
         cpu: '2'
@@ -20,6 +21,7 @@ spec:
       requests:
         cpu: '1'
         memory: 2Gi
+    {{- end }}
     listeners:
       - name: plain
         port: 9092
@@ -57,6 +59,7 @@ spec:
             sidecar.istio.io/inject: "false"
         securityContext: {}
     replicas: 3
+    {{- if not .Values.global.disableRequestsLimits }}
     resources:
       limits:
         cpu: '1'
@@ -64,6 +67,7 @@ spec:
       requests:
         cpu: '0.5'
         memory: "0.5Gi"
+    {{- end }}
     storage:
       class: {{ .Values.storageClass }}
       type: persistent-claim
