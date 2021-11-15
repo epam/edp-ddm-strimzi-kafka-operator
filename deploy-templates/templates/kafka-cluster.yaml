@@ -200,7 +200,7 @@ spec:
             backup.velero.io/backup-volumes: data
             sidecar.istio.io/inject: "false"
         securityContext: {}
-    replicas: {{ .Values.cluster.numberOfKafkaBrokers }}
+    replicas: {{ .Values.cluster.numberOfZookeepers }}
     {{- if not .Values.global.disableRequestsLimits }}
     resources:
       limits:

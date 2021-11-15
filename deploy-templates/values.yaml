@@ -52,6 +52,7 @@ cluster:
   name: kafka-cluster
   clients: [ 'rest-api-user', 'kafka-api-user', 'settings-api-user', 'settings-persistence-user']
   numberOfKafkaBrokers: 3
+  numberOfZookeepers: 3
 
 image:
   registry: quay.io
