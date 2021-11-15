@@ -38,3 +38,10 @@ Create chart name and version as used by the chart label.
   {{- end -}}
 {{- end -}}
 {{- end -}}
+
+{{- define "imageRegistry" -}}
+{{- if .Values.global.imageRegistry -}}
+{{- printf "%s/" .Values.global.imageRegistry -}}
+{{- else -}}
+{{- end -}}
+{{- end }}
