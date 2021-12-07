@@ -12,7 +12,7 @@ spec:
             sidecar.istio.io/inject: "false"
         securityContext: {}
     version: 2.6.0
-    replicas: {{ .Values.cluster.numberOfKafkaBrokers }}
+    replicas: {{ .Values.global.kafkaOperator.kafkaBrokers }}
     {{- if not .Values.global.disableRequestsLimits }}
     resources:
       limits:
@@ -34,15 +34,15 @@ spec:
         authentication:
           type: tls
     config:
-      transaction.state.log.replication.factor: {{ .Values.cluster.numberOfKafkaBrokers }}
+      transaction.state.log.replication.factor: {{ .Values.global.kafkaOperator.kafkaBrokers }}
       log.message.format.version: '2.6'
-    {{- $logminisr := .Values.cluster.numberOfKafkaBrokers | int -}}
+    {{- $logminisr := .Values.global.kafkaOperator.kafkaBrokers | int -}}
     {{- if lt $logminisr 2 }}
-      transaction.state.log.min.isr: {{ .Values.cluster.numberOfKafkaBrokers }}
+      transaction.state.log.min.isr: {{ .Values.global.kafkaOperator.kafkaBrokers }}
     {{ else }}
-      transaction.state.log.min.isr: {{ sub .Values.cluster.numberOfKafkaBrokers 1 }}
+      transaction.state.log.min.isr: {{ sub .Values.global.kafkaOperator.kafkaBrokers 1 }}
     {{- end }}
-      offsets.topic.replication.factor: {{ .Values.cluster.numberOfKafkaBrokers }}
+      offsets.topic.replication.factor: {{ .Values.global.kafkaOperator.kafkaBrokers }}
     jvmOptions:
       "-XX":
         "UseG1GC": true
@@ -200,7 +200,7 @@ spec:
             backup.velero.io/backup-volumes: data
             sidecar.istio.io/inject: "false"
         securityContext: {}
-    replicas: {{ .Values.cluster.numberOfZookeepers }}
+    replicas: {{ .Values.global.kafkaOperator.zookeepers }}
     {{- if not .Values.global.disableRequestsLimits }}
     resources:
       limits:

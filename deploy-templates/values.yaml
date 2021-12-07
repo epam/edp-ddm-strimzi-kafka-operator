@@ -1,4 +1,8 @@
 global:
+  kafkaOperator:
+    kafkaBrokers: 3
+    zookeepers: 3
+    replicationFactor: 3
   disableRequestsLimits: false
 
 replicaCount: 1
@@ -51,8 +55,6 @@ watchAnyNamespace: false
 cluster:
   name: kafka-cluster
   clients: [ 'rest-api-user', 'kafka-api-user', 'settings-api-user', 'settings-persistence-user']
-  numberOfKafkaBrokers: 3
-  numberOfZookeepers: 3
 
 image:
   registry: quay.io

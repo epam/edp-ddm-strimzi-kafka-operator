@@ -7,5 +7,5 @@ metadata:
 spec:
   config: {}
   partitions: 15
-  replicas: 3
+  replicas: {{ .Values.global.kafkaOperator.replicationFactor }}
   topicName: audit-events
