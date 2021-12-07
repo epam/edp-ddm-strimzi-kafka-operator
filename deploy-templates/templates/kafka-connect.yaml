@@ -19,6 +19,9 @@ spec:
     group.id: 'connect-cluster'
     offset.storage.topic: 'connect-cluster-offsets'
     status.storage.topic: 'connect-cluster-status'
+    config.storage.replication.factor: {{ .Values.global.kafkaOperator.replicationFactor }}
+    offset.storage.replication.factor: {{ .Values.global.kafkaOperator.replicationFactor }}
+    status.storage.replication.factor: {{ .Values.global.kafkaOperator.replicationFactor }}
   externalConfiguration:
     env:
       - name: DB_USER
