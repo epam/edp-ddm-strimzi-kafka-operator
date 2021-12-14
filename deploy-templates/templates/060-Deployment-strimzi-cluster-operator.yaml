@@ -33,7 +33,7 @@ spec:
             name: {{ .Values.logConfigMap }}
       containers:
         - name: strimzi-cluster-operator
-          image: {{ template "imageRegistry" . -}} strimzi/operator:0.20.1
+          image: {{ template "imageRegistry" . -}} {{ default .Values.image.repository .Values.imageRepositoryOverride }}/{{ .Values.image.imageName }}:{{ default .Values.image.tag .Values.imageTagOverride }}
           ports:
             - containerPort: 8080
               name: http

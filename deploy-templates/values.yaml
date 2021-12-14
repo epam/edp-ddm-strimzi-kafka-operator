@@ -59,7 +59,7 @@ cluster:
 image:
   registry: quay.io
   repository: strimzi
-  name: operator
+  imageName: operator
   tag: 0.21.1
   kafkadrop:
     name: kafka-ui
