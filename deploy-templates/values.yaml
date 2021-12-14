@@ -201,7 +201,7 @@ dockerProxyRegistry: nexus-docker-registry.apps.cicd2.mdtu-ddm.projects.epam.com
 
 kafkaConnectConf:
   clusterName: 'kafka-connect-cluster'
-  image: 'kafka-connect-image-master:1.3.0-SNAPSHOT.5'
+  image: 'kafka-connect-image-master:1.4.0-SNAPSHOT.26'
   auditDbName: 'audit'
   auditSecretName: citus-roles-secrets
   auditUserKey: anSvcName
