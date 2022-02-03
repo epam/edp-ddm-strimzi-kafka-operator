@@ -54,7 +54,9 @@ watchAnyNamespace: false
 
 cluster:
   name: kafka-cluster
-  clients: [ 'rest-api-user', 'kafka-api-user', 'settings-api-user', 'settings-persistence-user']
+  clients: [ 'rest-api-user', 'kafka-api-user', 'settings-api-user', 'settings-persistence-user',
+             'excerpt-api-user', 'excerpt-worker-user', 'process-history-api-user',
+             'process-history-persistence-user', 'bpms-user']
 
 image:
   registry: quay.io
