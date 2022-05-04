@@ -1,11 +1,16 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: strimzi-kafka-cluster-operator-local
+  name: strimzi-cluster-operator-namespaced-{{ .Values.defaultImageTag }}
+  labels:
+    app: strimzi
+    chart: {{ .Chart.Name }}
+    component: role-binding
 subjects:
   - kind: ServiceAccount
-    name: strimzi-kafka-cluster-operator
+    name: strimzi-cluster-operator-{{ .Values.defaultImageTag }}
+    namespace: {{ .Values.global.kafkaOperator.kafkaCentralNamespace }}
 roleRef:
-  kind: Role
-  name: strimzi-cluster-operator-namespaced
+  kind: ClusterRole
+  name: strimzi-cluster-operator-namespaced-{{ .Values.defaultImageTag }}
   apiGroup: rbac.authorization.k8s.io
