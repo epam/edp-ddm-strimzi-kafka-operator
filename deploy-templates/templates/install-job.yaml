@@ -1,7 +1,7 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: kafka-registration
+  name: kafka-registration-{{ uuidv4 }}
   labels:
     strimzi.io/cluster: {{ .Values.cluster.name }}
 spec:
