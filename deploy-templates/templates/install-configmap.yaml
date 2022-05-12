@@ -9,7 +9,7 @@ data:
     #!/bin/bash
 
     REGISTERED=$(oc get configmap kafka-watched-namaspaces -o=jsonpath='{.data.namespaces}' -n $KAFKA_CENTRAL_NAMESPACE)
-    if [[ ! $REGISTERED =~ (^|,)"$NAMESPACE"(,|$) ]]; then
+    if [[ ! $REGISTERED =~ (^|,)"$NAMESPACE"(,|$) && ! $REGISTERED == "*" ]]; then
       COMMAND=`echo oc patch configmap kafka-watched-namaspaces --patch \'\"data\": {\"namespaces\": \"$REGISTERED,$NAMESPACE\"}\' -n $KAFKA_CENTRAL_NAMESPACE`
       eval $COMMAND
       oc scale deployment/strimzi-cluster-operator --replicas=0 -n $KAFKA_CENTRAL_NAMESPACE || true
