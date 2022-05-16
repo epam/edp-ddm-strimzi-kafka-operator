@@ -52,8 +52,8 @@ service:
 cluster:
   name: kafka-cluster
   clients: [ 'rest-api-user', 'kafka-api-user', 'soap-api-user', 'settings-api-user', 'settings-persistence-user',
-             'excerpt-api-user', 'excerpt-worker-user', 'process-history-api-user',
-             'process-history-persistence-user', 'bpms-user', 'notification-service-user']
+             'excerpt-api-user', 'excerpt-worker-user', 'excerpt-worker-docx-user', 'excerpt-worker-csv-user',
+             'process-history-api-user', 'process-history-persistence-user', 'bpms-user', 'notification-service-user']
 
 defaultImageTag: 0.28.0
 image:
