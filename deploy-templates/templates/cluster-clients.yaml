@@ -1,5 +1,5 @@
 {{- range $client := .Values.cluster.clients }}
-apiVersion: kafka.strimzi.io/v1beta1
+apiVersion: kafka.strimzi.io/v1beta2
 kind: KafkaUser
 metadata:
   name: {{ $client }}
