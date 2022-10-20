@@ -4,6 +4,7 @@ global:
     zookeepers: 3
     replicationFactor: 3
   disableRequestsLimits: false
+  deploymentMode: development
 
 replicaCount: 1
 
