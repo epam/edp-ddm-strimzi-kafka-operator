@@ -60,7 +60,7 @@ spec:
       volumes:
         - id: 0
           type: persistent-claim
-          size: 20Gi
+          size: {{ .Values.global.kafkaOperator.storage.kafka.size }}
           deleteClaim: false
           class: {{ .Values.storageClass }}
     metricsConfig:
@@ -95,7 +95,7 @@ spec:
     storage:
       class: {{ .Values.storageClass }}
       type: persistent-claim
-      size: 5Gi
+      size: {{ .Values.global.kafkaOperator.storage.zookeeper.size }}
       deleteClaim: false
   entityOperator:
     topicOperator: {}
