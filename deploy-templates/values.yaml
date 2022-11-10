@@ -3,11 +3,6 @@ global:
     kafkaBrokers: 3
     zookeepers: 3
     replicationFactor: 3
-    storage:
-      zookeeper:
-        size: 5Gi
-      kafka:
-        size: 20Gi
   disableRequestsLimits: false
   deploymentMode: development
 
