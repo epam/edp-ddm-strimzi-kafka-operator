@@ -1,6 +1,6 @@
 void call() {
     String valuesFile = '/tmp/platform-values.yaml'
-    sh(script: "helm get values registry-configuration -n ${NAMESPACE} > ${valuesFile}")
+    sh(script: "helm get values registry-auth -n ${NAMESPACE} > ${valuesFile}")
     LinkedHashMap platformValues = readYaml file: valuesFile
     ['kafka', 'zookeeper'].each {
         String storageSize = platformValues['global']['kafkaOperator']['storage']["${it}"]['size']
