@@ -69,10 +69,28 @@ spec:
         configMapKeyRef:
           name: kafka-metrics
           key: kafka-metrics-config.yml
+    logging:
+      loggers:
+        log4j.logger.kafka.network.Processor: {{ .Values.kafka.logLevel }}
+        log4j.logger.org.apache.zookeeper: {{ .Values.kafka.logLevel }}
+        log4j.logger.kafka.request.logger: {{ .Values.kafka.logLevel }}
+        log4j.logger.kafka.authorizer.logger: {{ .Values.kafka.logLevel }}
+        log4j.logger.org.I0Itec.zkclient.ZkClient: {{ .Values.kafka.logLevel }}
+        log4j.logger.kafka.server.KafkaApis: {{ .Values.kafka.logLevel }}
+        log4j.logger.state.change.logger: {{ .Values.kafka.logLevel }}
+        log4j.logger.kafka.log.LogCleaner: {{ .Values.kafka.logLevel }}
+        log4j.logger.kafka.controller: {{ .Values.kafka.logLevel }}
+        log4j.logger.org.apache.kafka: {{ .Values.kafka.logLevel }}
+        log4j.logger.kafka: {{ .Values.kafka.logLevel }}
+      type: inline
   kafkaExporter:
     groupRegex: ".*"
     topicRegex: ".*"
   zookeeper:
+    logging:
+      loggers:
+        zookeeper.root.logger: {{ .Values.kafka.logLevel }}
+      type: inline
     template:
       pod:
         metadata:
@@ -98,5 +116,13 @@ spec:
       size: 5Gi
       deleteClaim: false
   entityOperator:
-    topicOperator: {}
-    userOperator: {}
+    topicOperator:
+      logging:
+        loggers:
+          rootLogger.level: {{ .Values.kafka.logLevel }}
+        type: inline
+    userOperator:
+      logging:
+        loggers:
+          rootLogger.level: {{ .Values.kafka.logLevel }}
+        type: inline
