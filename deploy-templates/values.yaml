@@ -56,6 +56,9 @@ cluster:
              'excerpt-api-user', 'excerpt-worker-user', 'excerpt-worker-docx-user', 'excerpt-worker-csv-user', 'user-publisher-user',
              'process-history-api-user', 'process-history-persistence-user', 'bpms-user', 'notification-service-user']
 
+kafka:
+  logLevel: "WARN"
+
 defaultImageTag: 0.28.0
 image:
   kafkadrop:
@@ -64,7 +67,6 @@ image:
     tag: latest
 logVolume: co-config-volume
 logConfigMap: strimzi-cluster-operator
-logLevel: ${env:STRIMZI_LOG_LEVEL:-INFO}
 fullReconciliationIntervalMs: 120000
 operationTimeoutMs: 300000
 kubernetesServiceDnsDomain: cluster.local
