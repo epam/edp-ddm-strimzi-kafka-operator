@@ -10,6 +10,8 @@ spec:
           annotations:
             backup.velero.io/backup-volumes: data-0
             sidecar.istio.io/inject: "false"
+          labels:
+            collect.logs: "plain-text"
         securityContext: {}
       podDisruptionBudget:
         maxUnavailable: 0
@@ -84,6 +86,11 @@ spec:
         log4j.logger.kafka: {{ .Values.kafka.logLevel }}
       type: inline
   kafkaExporter:
+    template:
+      pod:
+        metadata:
+          labels:
+            collect.logs: "plain-text"
     groupRegex: ".*"
     topicRegex: ".*"
   zookeeper:
@@ -97,6 +104,8 @@ spec:
           annotations:
             backup.velero.io/backup-volumes: data
             sidecar.istio.io/inject: "false"
+          labels:
+            collect.logs: "plain-text"
         securityContext: {}
       podDisruptionBudget:
         maxUnavailable: 0
@@ -116,6 +125,11 @@ spec:
       size: 5Gi
       deleteClaim: false
   entityOperator:
+    template:
+      pod:
+        metadata:
+          labels:
+            collect.logs: "plain-text"
     topicOperator:
       logging:
         loggers:
