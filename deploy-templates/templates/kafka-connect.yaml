@@ -11,6 +11,8 @@ spec:
       metadata:
         annotations:
           sidecar.istio.io/inject: "false"
+        labels:
+          collect.logs: "plain-text"
   bootstrapServers: 'kafka-cluster-kafka-bootstrap:9092'
   config:
     config.providers: 'env'
