@@ -88,6 +88,6 @@ kafkaConnectConf:
   auditSecretName: citus-roles-secrets
   auditUserKey: anSvcName
   auditPasswordKey: anSvcPass
-  dbConnectionUrl: 'jdbc:postgresql://citus-master:5432/audit'
+  dbConnectionUrl: 'jdbc:postgresql://citus-master:5432/audit?ApplicationName=strimzi-kafka-operator'
   auditConnectorName: 'audit'
   schemaRegistryUrl: 'http://kafka-schema-registry:8081'
