@@ -94,6 +94,12 @@ spec:
     groupRegex: ".*"
     topicRegex: ".*"
   zookeeper:
+    metricsConfig:
+      type: jmxPrometheusExporter
+      valueFrom:
+        configMapKeyRef:
+          key: zookeeper-metrics-config.yml
+          name: zookeeper-metrics-config
     logging:
       loggers:
         zookeeper.root.logger: {{ .Values.kafka.logLevel }}

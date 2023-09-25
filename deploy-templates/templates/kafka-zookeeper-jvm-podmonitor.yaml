@@ -1,0 +1,23 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PodMonitor
+metadata:
+  name: kafka-jvm-{{ .Values.namespace }}
+  namespace: openshift-monitoring
+spec:
+  jobLabel: app
+  namespaceSelector:
+    matchNames:
+      - {{ .Values.namespace }}
+  podMetricsEndpoints:
+    - interval: 30s
+      path: /metrics
+      scheme: http
+      targetPort: 9404
+  selector:
+    matchExpressions:
+      - key: app.kubernetes.io/name
+        operator: In
+        values:
+          - kafka
+          - zookeeper
+          - kafka-connect

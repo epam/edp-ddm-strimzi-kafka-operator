@@ -1,0 +1,20 @@
+{{- if eq .Values.global.deploymentMode "development" }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: "{{ .Values.kafkadrop.name }}-svc"
+  labels:
+    app.kubernetes.io/name: {{ .Values.kafkadrop.name }}
+spec:
+  type: {{ .Values.kafkadrop.service.type }}
+  ports:
+    - port: {{ .Values.kafkadrop.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  {{ if (and (eq .Values.kafkadrop.service.type "NodePort") (not (empty .Values.kafkadrop.service.nodePort))) }}
+      nodePort: {}
+  {{ end -}}
+  selector:
+    app.kubernetes.io/name: {{ .Values.kafkadrop.name }}
+{{- end }}

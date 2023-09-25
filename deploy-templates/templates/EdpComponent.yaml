@@ -7,7 +7,6 @@ metadata:
     control-plane-console/display-name: "Веб-інтерфейс моніторингу черг повідомлень (Kafka UI)"
     control-plane-console/display-order: "8"
     control-plane-console/operational-zone: "registry-administration-zone"
-    control-plane-console/platform-only: "true"
   name: kafka-ui
   namespace: {{ .Values.namespace }}
 spec:

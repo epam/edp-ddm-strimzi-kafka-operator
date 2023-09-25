@@ -14,6 +14,12 @@ spec:
         labels:
           collect.logs: "plain-text"
   bootstrapServers: 'kafka-cluster-kafka-bootstrap:9092'
+  metricsConfig:
+    type: jmxPrometheusExporter
+    valueFrom:
+      configMapKeyRef:
+        name: kafka-connect-metrics-config
+        key: kafka-connect-metrics-config.yml
   config:
     config.providers: 'env'
     config.providers.env.class: 'io.strimzi.kafka.EnvVarConfigProvider'

@@ -21,8 +21,3 @@ maintainers:
 - name: samuel-hawker
 - name: scholzj
 - name: tombentley
-
-dependencies:
-  - name: kafdrop
-    version: "0.1.0"
-    repository: "file://charts/kafdrop"

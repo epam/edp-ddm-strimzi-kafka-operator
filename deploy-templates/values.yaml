@@ -11,6 +11,11 @@ replicaCount: 1
 serviceAccountName: kafka-registration
 
 kafkadrop:
+  name: kafka-ui
+  image:
+    name: kafka-ui-image-master
+    version: 1.9.7.2
+  replicaCount: 1
   brokerConnect: kafka-cluster-kafka-bootstrap
   port: 9092
   properties: ""
@@ -19,23 +24,20 @@ kafkadrop:
   propertiesFile: "kafka.properties"
   truststoreFile: "kafka.truststore.jks"
   keystoreFile: "kafka.keystore.jks"
-
-jvm:
-  opts: ""
-jmx:
-  port: 8686
-host:
-
-server:
-  port: 9000
-  servlet:
-    contextPath: /
-cmdArgs: ""
-nodeSelector: {}
-
-tolerations: []
-
-affinity: {}
+  jvm:
+    opts: "-javaagent:./metrics-exporter/jmx_prometheus_javaagent-0.19.0.jar=9999:/metrics-exporter/kafka-ui-metrics-config.yaml"
+  jmx:
+    port: 8686
+  host: ""
+  server:
+    port: 9000
+    servlet:
+      contextPath: /
+  cmdArgs: ""
+  service:
+    annotations: {}
+    type: NodePort
+    port: 9000
 
 podAnnotations:
   sidecar.istio.io/inject: "false"
@@ -54,7 +56,7 @@ cluster:
   name: kafka-cluster
   clients: [ 'rest-api-user', 'kafka-api-user', 'soap-api-user', 'settings-api-user', 'settings-persistence-user',
              'excerpt-api-user', 'excerpt-worker-user', 'excerpt-worker-docx-user', 'excerpt-worker-csv-user', 'user-publisher-user',
-             'process-history-api-user', 'process-history-persistence-user', 'bpms-user', 'notification-service-user']
+             'process-history-api-user', 'process-history-persistence-user', 'bpms-user', 'notification-service-user', 'digital-document-service-user']
 
 kafka:
   logLevel: "WARN"

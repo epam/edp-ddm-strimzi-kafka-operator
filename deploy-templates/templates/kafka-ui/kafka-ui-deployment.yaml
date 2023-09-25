@@ -2,18 +2,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: "{{ .Values.image.kafkadrop.name }}"
+  name: "{{ .Values.kafkadrop.name }}"
   labels:
-    app.kubernetes.io/name: {{ .Values.image.kafkadrop.name }}
+    app.kubernetes.io/name: {{ .Values.kafkadrop.image.name }}
 spec:
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ .Values.kafkadrop.replicaCount }}
   selector:
     matchLabels:
-      app.kubernetes.io/name: {{ .Values.image.kafkadrop.name }}
+      app.kubernetes.io/name: {{ .Values.kafkadrop.name }}
   template:
     metadata:
       labels:
-        app.kubernetes.io/name: {{ .Values.image.kafkadrop.name }}
+        app.kubernetes.io/name: {{ .Values.kafkadrop.name }}
         collect.logs: "plain-text"
       annotations:
         sidecar.istio.io/inject: "false"
@@ -24,9 +24,8 @@ spec:
           command: [ "sh", "-c" ]
           args: [ "while ! nc -w 1 {{ .Values.kafkadrop.brokerConnect }} {{ .Values.kafkadrop.port }} </dev/null; do sleep 10; done;" ]
       containers:
-        - name: {{ .Values.image.kafkadrop.name }}
-          image: "{{ template "imageRegistry" . -}} {{ .Values.image.kafkadrop.repository }}:{{ .Values.image.kafkadrop.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
+        - name: {{ .Values.kafkadrop.name }}
+          image: "{{ template "imageRegistry" . -}} {{ .Values.edpProject }}/{{ .Values.kafkadrop.image.name }}:{{ .Values.kafkadrop.image.version }}"
           env:
           - name: KAFKA_BROKERCONNECT
             value: "{{ .Values.kafkadrop.brokerConnect }}:{{ .Values.kafkadrop.port }}"
@@ -37,13 +36,13 @@ spec:
           - name: KAFKA_KEYSTORE
             value: "{{ .Values.kafkadrop.keystore }}"
           - name: JVM_OPTS
-            value: "{{ .Values.jvm.opts }}"
+            value: "{{ .Values.kafkadrop.jvm.opts }}"
           - name: JMX_PORT
-            value: "{{ .Values.jmx.port }}"
+            value: "{{ .Values.kafkadrop.jmx.port }}"
           - name: HOST
-            value: "{{ .Values.host }}"
+            value: "{{ .Values.kafkadrop.host }}"
           - name: SERVER_SERVLET_CONTEXTPATH
-            value: "{{ .Values.server.servlet.contextPath | trimSuffix "/" }}"
+            value: "{{ .Values.kafkadrop.server.servlet.contextPath | trimSuffix "/" }}"
           - name: KAFKA_PROPERTIES_FILE
             value: "{{ .Values.kafkadrop.propertiesFile }}"
           - name: KAFKA_TRUSTSTORE_FILE
@@ -51,27 +50,30 @@ spec:
           - name: KAFKA_KEYSTORE_FILE
             value: "{{ .Values.kafkadrop.keystoreFile }}"
           - name: SERVER_PORT
-            value: "{{ .Values.server.port }}"
+            value: "{{ .Values.kafkadrop.server.port }}"
           - name: CMD_ARGS
   {{- if .Values.mountProtoDesc.enabled }}
-            value: "--message.format=PROTOBUF --protobufdesc.directory=/protodesc/ {{ .Values.cmdArgs }}"
+            value: "--message.format=PROTOBUF --protobufdesc.directory=/protodesc/ {{ .Values.kafkadrop.cmdArgs }}"
   {{- else }}
-            value: "{{ .Values.cmdArgs }}"
+            value: "{{ .Values.kafkadrop.cmdArgs }}"
   {{- end }}
           ports:
             - name: http
               containerPort: 9000
               protocol: TCP
+            - name: jvm-metrics
+              containerPort: 9999
+              protocol: TCP
           livenessProbe:
             httpGet:
-              path: "{{ .Values.server.servlet.contextPath | trimSuffix "/" }}/actuator/health"
+              path: "{{ .Values.kafkadrop.server.servlet.contextPath | trimSuffix "/" }}/actuator/health"
               port: http
             initialDelaySeconds: 180
             periodSeconds: 30
             timeoutSeconds: 10
           readinessProbe:
             httpGet:
-              path: "{{ .Values.server.servlet.contextPath | trimSuffix "/" }}/actuator/health"
+              path: "{{ .Values.kafkadrop.server.servlet.contextPath | trimSuffix "/" }}/actuator/health"
               port: http
             initialDelaySeconds: 20
             periodSeconds: 5
