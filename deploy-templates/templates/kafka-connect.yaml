@@ -6,11 +6,19 @@ metadata:
     "helm.sh/hook": post-install,post-upgrade
   name: {{ .Values.kafkaConnectConf.clusterName }}
 spec:
+  {{- if .Values.global.container.requestsLimitsEnabled }}
+  resources: {{- toYaml .Values.global.registry.kafkaConnectClusterConnect.container.resources | nindent 6 }}
+  {{- end }}
   template:
+    {{- if .Values.global.registry.kafkaConnectClusterConnect.container.envVars }}
+    connectContainer:
+      env:
+        {{- range $name, $value := .Values.global.registry.kafkaConnectClusterConnect.container.envVars }}
+        - name: {{ $name }}
+          value: {{ $value | quote }}
+        {{- end }}{{- end }}
     pod:
       metadata:
-        annotations:
-          sidecar.istio.io/inject: "false"
         labels:
           collect.logs: "plain-text"
   bootstrapServers: 'kafka-cluster-kafka-bootstrap:9092'

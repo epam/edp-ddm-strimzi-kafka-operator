@@ -1,10 +1,48 @@
 global:
-  kafkaOperator:
-    kafkaBrokers: 3
-    zookeepers: 3
-    replicationFactor: 3
-  disableRequestsLimits: false
+  container:
+    requestsLimitsEnabled: true
   deploymentMode: development
+  kafkaOperator:
+    replicationFactor: 1
+  registry:
+    kafkaClusterKafka:
+      container:
+        envVars: {}
+        resources:
+          requests: {}
+          limits: {}
+      replicas: 1
+    kafkaClusterZookeper:
+      container:
+        envVars: {}
+        resources:
+          limits: {}
+          requests: {}
+      replicas: 1
+    kafkaUi:
+      container:
+        envVars: {}
+        resources:
+          requests: {}
+          limits: {}
+    kafkaClusterKafkaExporter:
+      container:
+        envVars: {}
+        resources:
+          requests: {}
+          limits: {}
+    kafkaConnectClusterConnect:
+      container:
+        envVars: {}
+        resources:
+          requests: {}
+          limits: {}
+    kafkaClusterEntityOperator:
+      container:
+        envVars: {}
+        resources:
+          requests: {}
+          limits: {}
 
 replicaCount: 1
 

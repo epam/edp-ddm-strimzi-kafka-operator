@@ -15,8 +15,6 @@ spec:
       labels:
         app.kubernetes.io/name: {{ .Values.kafkadrop.name }}
         collect.logs: "plain-text"
-      annotations:
-        sidecar.istio.io/inject: "false"
     spec:
       initContainers:
         - name: init
@@ -57,6 +55,11 @@ spec:
   {{- else }}
             value: "{{ .Values.kafkadrop.cmdArgs }}"
   {{- end }}
+          {{- if .Values.global.registry.kafkaUi.container.envVars }}
+          {{- range $name, $value := .Values.global.registry.kafkaUi.container.envVars }}
+          - name: {{ $name }}
+            value: {{ $value | quote }}
+          {{- end }}{{- end }}
           ports:
             - name: http
               containerPort: 9000
@@ -78,8 +81,9 @@ spec:
             initialDelaySeconds: 20
             periodSeconds: 5
             timeoutSeconds: 10
-          resources:
-  {{ toYaml .Values.kafkadropresources | indent 12 }}
+          {{- if .Values.global.container.requestsLimitsEnabled }}
+          resources: {{- toYaml .Values.global.registry.kafkaUi.container.resources | nindent 12 }}
+          {{- end }}
   {{- with .Values.nodeSelector }}
       nodeSelector:
   {{ toYaml . | indent 8 }}

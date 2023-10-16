@@ -5,26 +5,26 @@ metadata:
 spec:
   kafka:
     template:
+      {{- if .Values.global.registry.kafkaClusterKafka.container.envVars }}
+      kafkaContainer:
+        env:
+        {{- range $name, $value := .Values.global.registry.kafkaClusterKafka.container.envVars }}
+        - name: {{ $name }}
+          value: {{ $value | quote }}
+        {{- end }}{{- end }}
       pod:
         metadata:
           annotations:
             backup.velero.io/backup-volumes: data-0
-            sidecar.istio.io/inject: "false"
           labels:
             collect.logs: "plain-text"
         securityContext: {}
       podDisruptionBudget:
         maxUnavailable: 0
     version: 3.0.0
-    replicas: {{ .Values.global.kafkaOperator.kafkaBrokers }}
-    {{- if not .Values.global.disableRequestsLimits }}
-    resources:
-      limits:
-        cpu: '2'
-        memory: 4Gi
-      requests:
-        cpu: '1'
-        memory: 2Gi
+    replicas: {{ .Values.global.registry.kafkaClusterKafka.replicas }}
+    {{- if .Values.global.container.requestsLimitsEnabled }}
+    resources: {{- toYaml .Values.global.registry.kafkaClusterKafka.container.resources | nindent 6 }}
     {{- end }}
     listeners:
       - name: plain
@@ -38,13 +38,13 @@ spec:
         authentication:
           type: tls
     config:
-      transaction.state.log.replication.factor: {{ .Values.global.kafkaOperator.kafkaBrokers }}
+      transaction.state.log.replication.factor: {{ .Values.global.registry.kafkaClusterKafka.replicas }}
       log.message.format.version: '3.0'
-    {{- $logminisr := .Values.global.kafkaOperator.kafkaBrokers | int -}}
+    {{- $logminisr := .Values.global.registry.kafkaClusterKafka.replicas | int -}}
     {{- if lt $logminisr 2 }}
-      transaction.state.log.min.isr: {{ .Values.global.kafkaOperator.kafkaBrokers }}
+      transaction.state.log.min.isr: {{ .Values.global.registry.kafkaClusterKafka.replicas }}
     {{ else }}
-      transaction.state.log.min.isr: {{ sub .Values.global.kafkaOperator.kafkaBrokers 1 }}
+      transaction.state.log.min.isr: {{ sub .Values.global.registry.kafkaClusterKafka.replicas 1 }}
     {{- end }}
       offsets.topic.replication.factor: {{ .Values.global.kafkaOperator.replicationFactor }}
     jvmOptions:
@@ -86,6 +86,9 @@ spec:
         log4j.logger.kafka: {{ .Values.kafka.logLevel }}
       type: inline
   kafkaExporter:
+    {{- if .Values.global.container.requestsLimitsEnabled }}
+    resources: {{- toYaml .Values.global.registry.kafkaClusterKafkaExporter.container.resources | nindent 6 }}
+    {{- end }}
     template:
       pod:
         metadata:
@@ -100,31 +103,31 @@ spec:
         configMapKeyRef:
           key: zookeeper-metrics-config.yml
           name: zookeeper-metrics-config
+    {{- if .Values.global.container.requestsLimitsEnabled }}
+    resources: {{- toYaml .Values.global.registry.kafkaClusterZookeper.container.resources | nindent 6 }}
+    {{- end }}
     logging:
       loggers:
         zookeeper.root.logger: {{ .Values.kafka.logLevel }}
       type: inline
     template:
+      {{- if .Values.global.registry.kafkaClusterZookeper.container.envVars }}
+      zookeeperContainer:
+        env:
+        {{- range $name, $value := .Values.global.registry.kafkaClusterZookeper.container.envVars }}
+          - name: {{ $name }}
+            value: {{ $value | quote }}
+        {{- end }}{{- end }}
       pod:
         metadata:
           annotations:
             backup.velero.io/backup-volumes: data
-            sidecar.istio.io/inject: "false"
           labels:
             collect.logs: "plain-text"
         securityContext: {}
       podDisruptionBudget:
         maxUnavailable: 0
-    replicas: {{ .Values.global.kafkaOperator.zookeepers }}
-    {{- if not .Values.global.disableRequestsLimits }}
-    resources:
-      limits:
-        cpu: '1'
-        memory: "1Gi"
-      requests:
-        cpu: '0.5'
-        memory: "0.5Gi"
-    {{- end }}
+    replicas: {{ .Values.global.registry.kafkaClusterZookeper.replicas }}
     storage:
       class: {{ .Values.storageClass }}
       type: persistent-claim
@@ -137,11 +140,17 @@ spec:
           labels:
             collect.logs: "plain-text"
     topicOperator:
+    {{- if .Values.global.container.requestsLimitsEnabled }}
+      resources: {{- toYaml .Values.global.registry.kafkaClusterEntityOperator.container.resources | nindent 8 }}
+    {{- end }}
       logging:
         loggers:
           rootLogger.level: {{ .Values.kafka.logLevel }}
         type: inline
     userOperator:
+    {{- if .Values.global.container.requestsLimitsEnabled }}
+      resources: {{- toYaml .Values.global.registry.kafkaClusterEntityOperator.container.resources | nindent 8 }}
+    {{- end }}
       logging:
         loggers:
           rootLogger.level: {{ .Values.kafka.logLevel }}
